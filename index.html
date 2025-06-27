@@ -33,22 +33,37 @@ const baseConnaissances = {
   "article 1245": "Les articles 1245 à 1245-17 concernent la responsabilité liée aux produits défectueux, notamment du côté des fabricants.",
   "troubles anormaux de voisinage": "Selon la jurisprudence fondée sur l’article 1244, un voisin peut être responsable même sans faute, si ses activités causent un trouble excessif."
 };
+function repondre() {
+  const input = document.getElementById("input");
+  const question = input.value.toLowerCase().trim();
+  const chat = document.getElementById("chat");
 
-    function repondre() {
-      const input = document.getElementById("input");
-      const question = input.value.toLowerCase().trim();
-      const chat = document.getElementById("chat");
+  if (question === "") return;
 
-      if (question === "") return;
+  let reponse = null;
 
-      const reponse = baseConnaissances[question] || "Je suis désolé, je ne connais pas la réponse à cette question.";
-      
-      chat.innerHTML += `<div class="message user">Vous : ${question}</div>`;
-      chat.innerHTML += `<div class="message bot">Chatbot : ${reponse}</div>`;
-      
-      input.value = "";
-      chat.scrollTop = chat.scrollHeight;
+  // Recherche exacte d'abord
+  if (baseConnaissances[question]) {
+    reponse = baseConnaissances[question];
+  } else {
+    // Sinon, chercher un mot-clé contenu
+    for (const cle in baseConnaissances) {
+      if (question.includes(cle)) {
+        reponse = baseConnaissances[cle];
+        break;
+      }
     }
+  }
+
+  if (!reponse) {
+    reponse = "Je suis désolé, je ne connais pas la réponse à cette question.";
+  }
+
+  chat.innerHTML += `<div class="message user">Vous : ${question}</div>`;
+  chat.innerHTML += `<div class="message bot">Chatbot : ${reponse}</div>`;
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
+}
   </script>
 </body>
 </html>
